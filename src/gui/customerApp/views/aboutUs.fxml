@@ -17,7 +17,7 @@
 <AnchorPane styleClass="root" stylesheets="@../../utils/styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <VBox alignment="TOP_CENTER" fillWidth="false" prefHeight="586.0" prefWidth="911.0" spacing="20" stylesheets="@../../utils/styles.css">
       <!-- Title Section -->
-      <Label alignment="CENTER" prefHeight="64.0" prefWidth="356.0" styleClass="header" text="Reach out us" />
+      <Label alignment="CENTER" prefHeight="64.0" prefWidth="356.0" styleClass="header" text="Reach out to us" />
       <VBox prefHeight="296.0" prefWidth="401.0" style="-fx-background-color: 000000; -fx-background-radius: 30; -fx-border-color: black; -fx-border-radius: 30; -fx-border-width: 2;">
          <children>
             <HBox prefHeight="151.0" prefWidth="406.0">
