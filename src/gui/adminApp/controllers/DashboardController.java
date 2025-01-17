@@ -97,10 +97,6 @@ public class DashboardController {
         VBox notificationsSection = createNotificationsSection();
         mainContent.getChildren().add(notificationsSection);
 
-        // Statistics Section
-        VBox statisticsSection = createStatisticsSection();
-        mainContent.getChildren().add(statisticsSection);
-
         // Add main content to AnchorPane
         AnchorPane.setTopAnchor(mainContent, 10.0);
         AnchorPane.setLeftAnchor(mainContent, 10.0);
@@ -109,7 +105,6 @@ public class DashboardController {
         anchorPane.getChildren().add(mainContent);
 
         mainPane.setCenter(anchorPane);
-        disableButton(homeBtn);
     }
     private VBox createPendingOrdersSection() {
         VBox section = new VBox(10);
@@ -127,8 +122,8 @@ public class DashboardController {
         orderIdColumn.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getId())));
         orderIdColumn.setPrefWidth(200);
 
-        TableColumn<Order, Double> totalPriceColumn = new TableColumn<>("Total Price");
-        totalPriceColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>((double) cellData.getValue().getTotalPrice()));
+        TableColumn<Order, String> totalPriceColumn = new TableColumn<>("Total Price");
+        totalPriceColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(String.format("Total: $%.2f",   cellData.getValue().getTotalPrice())));
         totalPriceColumn.setPrefWidth(150);
 
         TableColumn<Order, Void> actionsColumn = new TableColumn<>("Actions");
@@ -179,34 +174,39 @@ public class DashboardController {
         section.setPadding(new Insets(20));
         section.setStyle("-fx-background-color: #ffffff; -fx-padding: 10px; -fx-border-color: #cccccc; -fx-border-radius: 5px; -fx-background-radius: 5px;");
 
-        Label sectionTitle = new Label("Notifications");
-        sectionTitle.setFont(Font.font("Arial", FontWeight.BOLD, 18));
-
-        // Out of Stock
+        // Out of Stock Products
         Label outOfStockLabel = new Label("Out of Stock Products:");
+        outOfStockLabel.setFont(Font.font("Arial", FontWeight.BOLD, 18));
+        outOfStockLabel.setStyle("-fx-text-fill: #388e3c;"); // Green for subsection title
+        section.getChildren().add(outOfStockLabel);
+
         List<Product> outOfStockProducts = products.stream()
                 .filter(product -> product.getStock() == 0)
                 .toList();
-        outOfStockProducts.forEach(product -> section.getChildren().add(new Label("- " + product.getName())));
+        outOfStockProducts.forEach(product -> {
+            Label productLabel = new Label("- " + product.getName());
+            productLabel.setFont(Font.font("Arial", 14));
+            section.getChildren().add(productLabel);
+        });
 
-        // Top-Selling
+        // Top-Selling Products
         Label topSellingLabel = new Label("Top-Selling Products:");
+        topSellingLabel.setFont(Font.font("Arial", FontWeight.BOLD, 18));
+        topSellingLabel.setStyle("-fx-text-fill: #388e3c;"); // Green for subsection title
+        section.getChildren().add(topSellingLabel);
+
         products.stream()
                 .sorted(Comparator.comparingInt(Product::getSoldItems).reversed())
                 .limit(3)
-                .forEach(product -> section.getChildren().add(new Label("- " + product.getName() + " (Sold: " + product.getSoldItems() + ")")));
+                .forEach(product -> {
+                    Label productLabel = new Label("- " + product.getName() + " (Sold: " + product.getSoldItems() + ")");
+                    productLabel.setFont(Font.font("Arial", 14));
+                    section.getChildren().add(productLabel);
+                });
 
-        section.getChildren().addAll(sectionTitle, outOfStockLabel, topSellingLabel);
-        return section;
-    }
-
-    private VBox createStatisticsSection() {
-        VBox section = new VBox(10);
-        section.setPadding(new Insets(20));
-        section.setStyle("-fx-background-color: #ffffff; -fx-padding: 10px; -fx-border-color: #cccccc; -fx-border-radius: 5px; -fx-background-radius: 5px;");
-
-        Label sectionTitle = new Label("Statistics");
+        Label sectionTitle = new Label("Statistics:");
         sectionTitle.setFont(Font.font("Arial", FontWeight.BOLD, 18));
+        sectionTitle.setStyle("-fx-text-fill: #388e3c;");
 
         int totalOrders = pendingOrders.size() + confirmedOrders.size() + deliveredOrders.size();
         double totalRevenue = confirmedOrders.stream().mapToDouble(Order::getTotalPrice).sum()
@@ -220,6 +220,10 @@ public class DashboardController {
 
         return section;
     }
+
+
+
+
 
 
     @FXML
@@ -244,18 +248,15 @@ public class DashboardController {
     @FXML
     public void goToAddProduct(ActionEvent event) throws IOException {
         goToView("../views/addNewProduct.fxml");
-        disableButton(addProductBtn);
 
     }
 
     @FXML private void goToModifyProduct(ActionEvent event) throws IOException {
         mainPane.setCenter(createProductTable());
-        disableButton(modifyBtn);
     }
 
     @FXML private void goToAddCategory(ActionEvent event) throws IOException {
         goToView("../views/addCategory.fxml");
-        disableButton(addCategoryBtn);
     }
 
     private void goToView(String path) throws IOException {
@@ -395,8 +396,6 @@ public class DashboardController {
 
     @FXML public void viewCustomers(ActionEvent actionEvent) {
 
-            disableButton(viewCustomersBtn);
-
             ObservableList<Customer> customers = FXCollections.observableArrayList(Database.customers);
             // Create TableView
             TableView<Customer> tableView = new TableView<>(customers);
@@ -460,7 +459,6 @@ public class DashboardController {
 
     @FXML
     public void goToProfile(ActionEvent actionEvent) {
-        disableButton(goToProfileBtn);
 
         Admin admin = AdminService.getCurrentAdmin();
 
@@ -712,25 +710,11 @@ public class DashboardController {
 
    @FXML public void goToCategories(ActionEvent actionEvent) {
         mainPane.setCenter(createCategoryTable());
-        disableButton(modifyCategoryBtn);
     }
 
-    private void disableButton(Button btn) {
-        homeBtn.setDisable(false);
-        addProductBtn.setDisable(false);
-        modifyBtn.setDisable(false);
-        viewCustomersBtn.setDisable(false);
-        goToProfileBtn.setDisable(false);
-        addCategoryBtn.setDisable(false);
-        modifyCategoryBtn.setDisable(false);
-        addAdminBtn.setDisable(false);
-
-        btn.setDisable(true);
-    }
 
     @FXML public void goToAddAdmin(ActionEvent actionEvent) {
 
-        disableButton(addAdminBtn);
 
         // Create AnchorPane
         AnchorPane anchorPane = new AnchorPane();

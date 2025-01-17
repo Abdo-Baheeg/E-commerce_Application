@@ -1,7 +1,10 @@
 package src.gui.customerApp.controllers;
 
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import org.controlsfx.control.Notifications;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -16,8 +19,6 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -35,7 +36,7 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-public class LoginController {
+public class LoginController implements Initializable {
 
        @FXML public ImageView img;
     public AnchorPane registerPane;
@@ -56,36 +57,29 @@ public class LoginController {
         private TextField username;
 
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        // goToView("../views/loginPane.fxml",goToLoginBtn);
+        System.out.println("fff");
+    }
         @FXML
         void goToContactUs(ActionEvent event) throws IOException {
-
-
-            try{
-                goToRegisterBtn.setDisable(false);
-                contactUsBtn.setDisable(true);
-                goToLoginBtn.setDisable(false);
-                AnchorPane anchorPane = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("../views/aboutUs.fxml")));
-                loginPane.setCenter(anchorPane);
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-            }
+            goToView("../views/aboutUs.fxml",contactUsBtn);
         }
 
     @FXML
-    private void goToView(String fxmlPath, Button activeButton) throws IOException {
+    private void goToView(String fxmlPath, Button btn) throws IOException {
         try {
-            // Enable all buttons first
-            goToRegisterBtn.setDisable(false);
-            contactUsBtn.setDisable(false);
-            goToLoginBtn.setDisable(false);
-
-            // Disable the currently active button
-            activeButton.setDisable(true);
+            goToLoginBtn.setStyle("-fx-background-color: transparent;");
+            contactUsBtn.setStyle("-fx-background-color: transparent;");
+            goToRegisterBtn.setStyle("-fx-background-color: transparent;");
+            btn.setStyle("-fx-background-color: green; -fx-text-fill: white; -fx-background-radius: 30;");
 
             // Load the specified view
             AnchorPane anchorPane = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(fxmlPath)));
             loginPane.setCenter(anchorPane);
         } catch (IOException e) {
+            e.printStackTrace();
             System.out.println(e.getMessage());
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
@@ -97,12 +91,13 @@ public class LoginController {
 
     @FXML
     public void goToLogin(ActionEvent event) throws IOException {
-        goToView("../views/loginPane.fxml", goToLoginBtn);
+
+        goToView("../views/loginPane.fxml",goToLoginBtn);
     }
 
     @FXML
     public void goToRegister(ActionEvent event) throws IOException {
-        goToView("../views/register.fxml", goToRegisterBtn);
+        goToView("../views/register.fxml",goToRegisterBtn);
     }
 
 
@@ -189,8 +184,6 @@ public class LoginController {
         @FXML
         private Button submitBtn;
 
-        Image image;
-
         @FXML
         void choosePhoto(ActionEvent event) {
 
@@ -272,6 +265,7 @@ public class LoginController {
                 stage.show();
             }
     }
+
 
 }
 

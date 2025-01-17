@@ -16,6 +16,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.controlsfx.control.Notifications;
@@ -76,12 +77,6 @@ public class DashboardController implements Initializable {
 
     @FXML
     void goToHome(ActionEvent event) {
-        homeBtn.setDisable(true);
-        interestsBtn.setDisable(false);
-        profileBtn.setDisable(false);
-        cartBtn.setDisable(false);
-        ordersBtn.setDisable(false);
-        addCreditsBtn.setDisable(false);
         populateGridPane();
         ScrollPane pane = new ScrollPane(productsGrid);
         mainBorderPane.setCenter(pane);
@@ -89,16 +84,11 @@ public class DashboardController implements Initializable {
 
     @FXML
     void goToInterests(ActionEvent event) {
-        // Disable the interests button and enable others
-        interestsBtn.setDisable(true);
-        homeBtn.setDisable(false);
-        profileBtn.setDisable(false);
-        cartBtn.setDisable(false);
-        ordersBtn.setDisable(false);
-        addCreditsBtn.setDisable(false);
 
         // Create the AnchorPane and TableView
-        AnchorPane pane = new AnchorPane();
+        VBox pane = new VBox();
+        pane.setSpacing(10);
+        pane.setAlignment(Pos.TOP_CENTER);
         TableView<Product> tableView = new TableView<>();
         tableView.setPrefWidth(1100);
 
@@ -126,11 +116,11 @@ public class DashboardController implements Initializable {
         TableColumn<Product, Void> actionColumn = new TableColumn<>("Action");
         actionColumn.setPrefWidth(200);
         actionColumn.setCellFactory(col -> new TableCell<>() {
-            private final Button button = new Button("Remove");
+            private final Button button = new Button("Uninterested");
 
             {
                 // Button styling
-                button.setStyle("-fx-background-color: #ff6b6b; -fx-text-fill: white; -fx-border-radius: 5px; -fx-background-radius: 5px;");
+                button.setStyle("-fx-background-color: green; -fx-text-fill: white; -fx-border-radius: 5px; -fx-background-radius: 5px;");
                 button.setOnAction(e -> {
                     Product product = getTableView().getItems().get(getIndex());
                     interests.remove(product); // Remove the product from the list
@@ -151,6 +141,9 @@ public class DashboardController implements Initializable {
 
         // Add columns to TableView
         tableView.getColumns().addAll(nameColumn, categoryColumn, priceColumn, stockCol, actionColumn);
+        Label i = new Label("Interests");
+        i.setStyle("-fx-text-fill: black; -fx-font-size: 24px");
+        pane.getChildren().add(i);
 
         // Add TableView to pane and set it in the center of BorderPane
         pane.getChildren().add(tableView);
@@ -164,12 +157,6 @@ public class DashboardController implements Initializable {
 
     @FXML
     void goToOrders(ActionEvent event) throws IOException {
-        interestsBtn.setDisable(false);
-        homeBtn.setDisable(false);
-        profileBtn.setDisable(false);
-        cartBtn.setDisable(false);
-        ordersBtn.setDisable(true);
-        addCreditsBtn.setDisable(false);
 
 
         ScrollPane scrollPane = new ScrollPane();
@@ -187,6 +174,9 @@ public class DashboardController implements Initializable {
             emptyLabel.setStyle("-fx-font-size: 18px; -fx-text-fill: #555555;");
             ordersContainer.getChildren().add(emptyLabel);
         } else {
+            Label ordersLabel = new Label("Orders:");
+            ordersLabel.setStyle("-fx-font-size: 24px; -fx-fill: BLACK");
+            ordersContainer.getChildren().add(ordersLabel);
             for (Order order : orders) {
                 AnchorPane orderCard = createOrderCard(order);
                 ordersContainer.getChildren().add(orderCard);
@@ -251,12 +241,6 @@ public class DashboardController implements Initializable {
 
     @FXML
     void goToProfile(ActionEvent event) throws IOException {
-        cartBtn.setDisable(false);
-        interestsBtn.setDisable(false);
-        ordersBtn.setDisable(false);
-        addCreditsBtn.setDisable(false);
-        profileBtn.setDisable(true);
-
 
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setFitToWidth(true);
@@ -447,9 +431,7 @@ public class DashboardController implements Initializable {
 
     @FXML
     void search(ActionEvent event) {
-        homeBtn.setDisable(false);
         String search = searchField.getText();
-        ProductDAO productDAO = new ProductDAO();
         productsGrid.getChildren().clear();
         productsGrid.setHgap(10);
         productsGrid.setVgap(10);
@@ -532,16 +514,6 @@ public class DashboardController implements Initializable {
     @FXML
     public void goToView(String fxmlPath, Button activeButton) throws IOException {
         try {
-            // Enable all buttons first
-           // homeBtn.setDisable(false);
-            cartBtn.setDisable(false);
-            interestsBtn.setDisable(false);
-            ordersBtn.setDisable(false);
-            addCreditsBtn.setDisable(false);
-            profileBtn.setDisable(false);
-
-            // Disable the currently active button
-            activeButton.setDisable(true);
 
             // Load the specified view
             AnchorPane anchorPane = FXMLLoader.load(Objects.requireNonNull(DashboardController.class.getResource(fxmlPath)));
@@ -569,13 +541,6 @@ public class DashboardController implements Initializable {
     Label totalPriceLabel = new Label("Total: $0.00");
     @FXML
     void goToCart(ActionEvent event) {
-        interestsBtn.setDisable(false);
-        homeBtn.setDisable(false);
-        profileBtn.setDisable(false);
-        cartBtn.setDisable(true);
-        ordersBtn.setDisable(false);
-        addCreditsBtn.setDisable(false);
-
         ObservableList<CartItem> cartItems = FXCollections.observableArrayList(CustomerService.getCurrentCustomer().getCart().getProducts());
 
         // Create TableView
@@ -608,7 +573,7 @@ public class DashboardController implements Initializable {
             private final Button removeButton = new Button("Remove");
 
             {
-                removeButton.setStyle("-fx-background-color: #ff6b6b; -fx-text-fill: white; -fx-border-radius: 5px; -fx-background-radius: 5px;");
+                removeButton.setStyle("-fx-background-color: green; -fx-text-fill: white; -fx-border-radius: 5px; -fx-background-radius: 5px;");
                 removeButton.setOnAction(event -> {
                     CartItem currentItem = getTableView().getItems().get(getIndex());
                     cartItems.remove(currentItem); // Remove item from the list
@@ -677,10 +642,13 @@ public class DashboardController implements Initializable {
         HBox totalPriceBox = new HBox(totalPriceLabel);
         totalPriceBox.setAlignment(Pos.CENTER_RIGHT);
         totalPriceBox.setPadding(new Insets(10, 20, 10, 20));
+        Label c = new Label("Cart");
+        c.setStyle("-fx-font-size: 25px; -fx-font-weight: bold; -fx-alignment: center");
 
         // Main Layout
-        VBox mainBox = new VBox(10, tableView, totalPriceBox, buttonBox);
+        VBox mainBox = new VBox(10,c, tableView, totalPriceBox, buttonBox);
         mainBox.setPadding(new Insets(20));
+        mainBox.setFillWidth(true);
         mainBox.setStyle("-fx-background-color: #ffffff; -fx-border-color: #dddddd; -fx-border-radius: 10px;");
 
         // Add to BorderPane

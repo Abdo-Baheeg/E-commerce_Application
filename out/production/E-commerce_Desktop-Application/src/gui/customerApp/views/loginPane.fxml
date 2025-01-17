@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane id="loginPane" fx:id="loginAnchorPane" prefHeight="573.0" prefWidth="725.0" scaleShape="false" snapToPixel="false" style="-fx-background-imgPath: url('../../utils/img/banner-with-abstract-background-with-blue-tones-paper-cutout-waves.jpg');" styleClass="root" stylesheets="@../../utils/styles.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="src.gui.customerApp.controllers.LoginController">
+<AnchorPane id="loginPane" fx:id="loginAnchorPane" prefHeight="573.0" prefWidth="725.0" scaleShape="false" snapToPixel="false" style=";" styleClass="root" stylesheets="@../../utils/styles.css" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="src.gui.customerApp.controllers.LoginController">
    <VBox layoutX="199.0" layoutY="90.0" prefHeight="433.0" prefWidth="347.0" style="-fx-alignment: CENTER; -fx-background-radius: 50;">
       <HBox prefHeight="100.0" prefWidth="200.0">
          <ImageView fx:id="img" fitHeight="150.0" fitWidth="157.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true">
@@ -47,7 +47,7 @@
          </GridPane>
       </HBox>
       <Separator opacity="0.0" prefHeight="45.0" prefWidth="347.0" />
-      <Button id="loginButton" fx:id="loginButton" alignment="CENTER" mnemonicParsing="false" onAction="#login" prefHeight="62.0" prefWidth="311.0" style="-fx-background-radius: 20; -fx-background-color: green;" text="Log in" textAlignment="CENTER" textFill="WHITE">
+      <Button id="loginButton" fx:id="loginButton" alignment="CENTER" mnemonicParsing="false" onAction="#login" prefHeight="62.0" prefWidth="311.0" style="-fx-background-radius: 30; -fx-background-color: green;" text="Log in" textAlignment="CENTER" textFill="WHITE">
          <font>
             <Font size="20.0" />
          </font>

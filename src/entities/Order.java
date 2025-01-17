@@ -3,10 +3,12 @@ package src.entities;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Random;
+import java.util.UUID;
+import java.util.random.RandomGenerator;
 
 public class Order implements Serializable {
     private final int id;
-    private static int idCounter=1;
     private ArrayList<CartItem> Items = new ArrayList<>();
     private payMethod payMethod;
     private Status status;
@@ -15,7 +17,7 @@ public class Order implements Serializable {
 
 
     public Order() {
-        this.id = idCounter++;
+        this.id = UUID.randomUUID().hashCode();
         this.totalPrice = 0.0f;
         this.Items = new ArrayList<>();
         this.status=Status.PENDING;
@@ -23,7 +25,7 @@ public class Order implements Serializable {
     public Order(ArrayList<CartItem> Items) {
         this.Items = Items;
         this.status = Status.PENDING;
-        this.id = idCounter++;
+        this.id = UUID.randomUUID().hashCode();
     }
 
     public Status getStatus() {
