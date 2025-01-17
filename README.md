@@ -10,6 +10,7 @@ Java project for OOP course at Faculty of Engineering, Ain Shams University - Fa
 ![image](https://github.com/user-attachments/assets/314a4ed8-bcfc-4ad1-8ce0-c11ede5aa252)
 
 ![image](https://github.com/user-attachments/assets/f5b8dc43-9e7f-469e-952c-551ccc580527)
+Note: I found that upload pictures of all those products was a bit boring, so I initialized them with a default Image
 
 ![image](https://github.com/user-attachments/assets/86225678-df21-46c3-bd19-c2dff86b1f38)
 
